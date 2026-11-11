@@ -1,0 +1,27 @@
+# Scoring rubric per interview type (plan section 10.1). Each dimension is scored 1-5.
+# Weights must sum to 1.0; `overall` is the weighted average, computed in code, not by the LLM.
+technical:
+  correctness:   { weight: 0.35, description: "Technically accurate; no incorrect statements" }
+  depth:         { weight: 0.25, description: "Explains trade-offs, internals, and edge cases" }
+  specificity:   { weight: 0.15, description: "Concrete tools, numbers, and examples" }
+  structure:     { weight: 0.10, description: "Logical flow from main idea to details" }
+  communication: { weight: 0.15, description: "Clear and concise; no rambling" }
+
+system_design:
+  correctness:   { weight: 0.25, description: "Sound components and data flow; no infeasible choices" }
+  depth:         { weight: 0.30, description: "Scaling, failure modes, and trade-offs between alternatives" }
+  specificity:   { weight: 0.15, description: "Concrete technologies, capacity estimates, and numbers" }
+  structure:     { weight: 0.15, description: "Clarifies requirements first, then high-level design, then details" }
+  communication: { weight: 0.15, description: "Clear and concise; checks assumptions" }
+
+behavioral:
+  specificity:       { weight: 0.25, description: "A real, concrete situation with details, not hypotheticals" }
+  structure:         { weight: 0.25, description: "STAR: Situation, Task, Action, Result" }
+  impact_ownership:  { weight: 0.30, description: "Their personal actions and a measurable or concrete result" }
+  communication:     { weight: 0.20, description: "Clear and concise" }
+
+hr:
+  specificity:       { weight: 0.30, description: "Concrete, personal reasons and examples rather than clichés" }
+  structure:         { weight: 0.20, description: "Organized, answers the question asked" }
+  impact_ownership:  { weight: 0.20, description: "Self-awareness and ownership of choices" }
+  communication:     { weight: 0.30, description: "Clear, honest, and professional" }

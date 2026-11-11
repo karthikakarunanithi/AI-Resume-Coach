@@ -1,0 +1,5 @@
+GenAI Developer (fictional job post for testing)
+We are looking for a GenAI Developer to build LLM-powered products. You will design retrieval-augmented generation pipelines, build agents with tool calling, and evaluate model quality.
+Must have: Python, RAG, vector databases, prompt engineering, LLM evaluation.
+Nice to have: LangGraph, FastAPI, Docker, AWS.
+Responsibilities: build and ship RAG features, design evaluation sets, monitor latency and cost in production.

@@ -1,0 +1,33 @@
+# Free profile: everything on Groq's free tier (one GROQ_API_KEY, no card). Select it with MODEL_PROFILE=free in .env.
+# Free-tier limits per model: 1,000 requests/day and 8,000 tokens/minute, so tasks are spread over two models
+# and the client waits out a rate limit instead of failing.
+#
+# Chosen by running the app's own tasks (scratch eval, Nov 2026): both models produced valid JSON for every
+# task; as the answer evaluator, gpt-oss-120b met all 4 robustness bounds tried, while gpt-oss-20b scored a
+# long-but-empty answer 2.35 (bound 2.0). So 120b judges and plans, 20b (2-3x faster) talks and parses.
+# Prices are 0 so the cost report shows what you actually pay on the free tier.
+_free: &free { input_usd_per_mtok: 0, output_usd_per_mtok: 0, reasoning_effort: "low" }
+
+resume_parser:   { <<: *free, model: "groq/openai/gpt-oss-20b",  max_tokens: 4000, fallbacks: ["groq/openai/gpt-oss-120b"] }
+jd_analyzer:     { <<: *free, model: "groq/openai/gpt-oss-20b",  max_tokens: 3000, fallbacks: ["groq/openai/gpt-oss-120b"] }
+planner:         { <<: *free, model: "groq/openai/gpt-oss-120b", max_tokens: 8000 }
+interviewer:     { <<: *free, model: "groq/openai/gpt-oss-20b",  temperature: 0.6, max_tokens: 600, timeout: 8,
+                   fallbacks: ["groq/openai/gpt-oss-120b"] }
+evaluator:       { <<: *free, model: "groq/openai/gpt-oss-120b", max_tokens: 4000 }
+coach:           { <<: *free, model: "groq/openai/gpt-oss-120b", max_tokens: 8000 }
+guardrail:       { <<: *free, model: "groq/openai/gpt-oss-20b",  max_tokens: 1000 }
+# Not on 20b: that model's per-minute token budget is kept for the interviewer, the one call a candidate waits on
+summarizer:      { <<: *free, model: "groq/openai/gpt-oss-120b", max_tokens: 2000 }
+
+# Embeddings for the question bank (vector size must match questions.embedding = 1024).
+# provider "local" runs bge-m3 with sentence-transformers (pip install -e ".[embeddings]");
+# provider "litellm" calls an API, e.g. { provider: "litellm", model: "openai/text-embedding-3-small", dim: 1024 }
+embeddings:      { provider: "local", model: "BAAI/bge-m3", dim: 1024, batch_size: 32 }
+
+# Speech-to-text. Hosted Whisper needs no GPU; for local faster-whisper (pip install -e ".[voice]") use e.g.
+# { provider: "local", model: "distil-large-v3", device: "auto", compute_type: "int8" }
+stt:             { provider: "litellm", model: "groq/whisper-large-v3-turbo", language: "en" }
+
+# Text-to-speech. "browser" = the client speaks the text (free, robotic); for a natural voice use e.g.
+# { provider: "litellm", model: "openai/tts-1", voice: "nova", response_format: "mp3" }
+tts:             { provider: "browser" }

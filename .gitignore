@@ -1,0 +1,27 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+node_modules/
+dist/
+data/uploads/
+frontend/public/vad/
+frontend/e2e/screenshots/
+frontend/test-results/
+frontend/playwright-report/
+# real candidates' answers and ratings (personal data); run outputs
+backend/evals/datasets/answers.jsonl
+backend/evals/results/
+data/pgdata/
+data/pgdata.log
+demo/raw.webm
+demo/markers.json
+demo/demo-account.txt
+
+# Logs and build caches
+data/*.log
+*.tsbuildinfo

@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+/* Color roles. Components use these (bg-surface, text-ink, ...), never raw hex, so dark mode swaps in one place.
+   Chart values follow the dataviz reference palette (series-1 validated against both surfaces). */
+:root {
+  color-scheme: light;
+  --page: #f9f9f7;
+  --surface: #fcfcfb;
+  --wash: #f0efec;
+  --ink: #0b0b0b;
+  --ink-2: #52514e;
+  --muted: #6e6c67;
+  --line: #e1e0d9;
+  --axis: #c3c2b7;
+  --ring: rgba(11, 11, 11, 0.1);
+  --accent: #2a78d6;
+  --accent-strong: #1c5cab;
+  --accent-wash: #e3eefc;
+  --button: #1c5cab; /* white text 6.6:1 */
+  --button-hover: #184f95;
+  --on-accent: #ffffff;
+  --series-1: #2a78d6;
+  --good: #0ca30c;
+  --warning: #fab219;
+  --serious: #ec835a;
+  --critical: #d03b3b;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --page: #0d0d0d;
+    --surface: #1a1a19;
+    --wash: #262624;
+    --ink: #f0efec;
+    --ink-2: #c3c2b7;
+    --muted: #9a988f;
+    --line: #2c2c2a;
+    --axis: #383835;
+    --ring: rgba(255, 255, 255, 0.1);
+    --accent: #3987e5;
+    --accent-strong: #6da7ec;
+    --accent-wash: #16263d;
+    --button: #256abf; /* white text 5.4:1 */
+    --button-hover: #1c5cab;
+    --series-1: #3987e5;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0d0d0d;
+  --surface: #1a1a19;
+  --wash: #262624;
+  --ink: #f0efec;
+  --ink-2: #c3c2b7;
+  --muted: #9a988f;
+  --line: #2c2c2a;
+  --axis: #383835;
+  --ring: rgba(255, 255, 255, 0.1);
+  --accent: #3987e5;
+  --accent-strong: #6da7ec;
+  --accent-wash: #16263d;
+  --button: #256abf;
+  --button-hover: #1c5cab;
+  --series-1: #3987e5;
+}
+
+@theme inline {
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-wash: var(--wash);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-ring: var(--ring);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-wash: var(--accent-wash);
+  --color-button: var(--button);
+  --color-button-hover: var(--button-hover);
+  --color-on-accent: var(--on-accent);
+  --color-series-1: var(--series-1);
+  --color-good: var(--good);
+  --color-warning: var(--warning);
+  --color-serious: var(--serious);
+  --color-critical: var(--critical);
+  --font-sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+body {
+  @apply bg-page font-sans text-ink antialiased;
+}
+
+/* Interviewer avatar: soft rings while speaking */
+@keyframes speak-ring {
+  0% { transform: scale(1); opacity: 0.5; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+.speak-ring {
+  animation: speak-ring 1.6s ease-out infinite;
+}
+.speak-ring.delay {
+  animation-delay: 0.8s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .speak-ring { animation: none; opacity: 0.25; }
+}
+
+/* PDF export via the browser's print dialog */
+@media print {
+  @page { margin: 14mm; }
+  body { background: #fff; color: #000; }
+  .no-print { display: none !important; }
+  .print-break { break-inside: avoid; }
+  * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+}

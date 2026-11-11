@@ -1,0 +1,258 @@
+{
+  "session_id": "sample",
+  "role": "GenAI Developer",
+  "interview_type": "technical",
+  "difficulty": "medium",
+  "generated_at": "2026-11-01T18:30:00Z",
+  "overall_score": 63,
+  "hiring_signal": "Lean no",
+  "questions_planned": 4,
+  "questions_answered": 3,
+  "dimension_scores": {
+    "correctness": 3.67,
+    "depth": 2.67,
+    "specificity": 3.33,
+    "structure": 3.33,
+    "communication": 3.67
+  },
+  "summary": "You explained your RAG project with real numbers, like choosing 512-token chunks because recall@5 was highest, which is exactly what interviewers look for. Your answers got thinner when the follow-ups pushed on trade-offs: on evaluation you described what you measured but not how you would catch a regression. Tightening the 'why' behind each decision would move you into the Lean yes range.",
+  "strengths": [
+    "You backed your chunking decision with a metric (recall@5 on a labelled set), not just intuition.",
+    "Clear structure on the LangGraph question: state first, then nodes, then how you handled retries.",
+    "You stayed calm and asked a clarifying question instead of guessing on the evaluation question."
+  ],
+  "improvements": [
+    "Explain trade-offs explicitly: when you pick an option, say what you gave up and why it was acceptable.",
+    "For evaluation questions, name the failure you're guarding against and how the metric would catch it.",
+    "Cut filler openings; start with a one-sentence answer, then expand."
+  ],
+  "practice_plan": [
+    {
+      "day": 1,
+      "focus": "Trade-off framing",
+      "tasks": [
+        "Rewrite 3 project decisions as 'I chose X over Y because Z, at the cost of W'",
+        "Say each aloud in under 45 seconds"
+      ]
+    },
+    {
+      "day": 2,
+      "focus": "RAG evaluation",
+      "tasks": [
+        "Read about faithfulness vs context recall",
+        "Design a 20-question golden set for your project"
+      ]
+    },
+    {
+      "day": 3,
+      "focus": "LLM-as-judge pitfalls",
+      "tasks": [
+        "List 3 judge biases (position, length, self-preference)",
+        "Explain one mitigation for each"
+      ]
+    },
+    {
+      "day": 4,
+      "focus": "Agent reliability",
+      "tasks": [
+        "Sketch how your LangGraph agent recovers from a failed tool call",
+        "Practise explaining it in 90 seconds"
+      ]
+    },
+    {
+      "day": 5,
+      "focus": "Concise openings",
+      "tasks": [
+        "Answer 5 bank questions starting with a one-line summary",
+        "Record yourself and count filler words"
+      ]
+    },
+    {
+      "day": 6,
+      "focus": "Mock follow-ups",
+      "tasks": [
+        "Have a friend ask 'why?' three times on one of your answers",
+        "Note where your reasoning ran out"
+      ]
+    },
+    {
+      "day": 7,
+      "focus": "Full mock interview",
+      "tasks": [
+        "Run a 20-minute technical mock in the app",
+        "Compare your scores with this report"
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "question_id": "q1",
+      "text": "In your support-bot project, how did you choose the chunk size for retrieval?",
+      "topic": "rag",
+      "transcript": [
+        {
+          "speaker": "interviewer",
+          "text": "In your support-bot project, how did you choose the chunk size for retrieval?"
+        },
+        {
+          "speaker": "candidate",
+          "text": "First I tried 256, then 512 and 1024. We settled on 512-token chunks with 50 tokens of overlap because recall at 5 went from 0.71 to 0.83 on our labelled set."
+        },
+        {
+          "speaker": "interviewer",
+          "text": "Why do you think 256 did worse?"
+        },
+        {
+          "speaker": "candidate",
+          "text": "Smaller chunks lost the context around the answer, so the retriever matched the keyword but the chunk didn't contain the full explanation."
+        }
+      ],
+      "evaluated": true,
+      "scores": {
+        "correctness": 4,
+        "depth": 3,
+        "specificity": 5,
+        "structure": 4,
+        "communication": 4
+      },
+      "evidence": {
+        "correctness": "512-token chunks with 50 tokens of overlap",
+        "depth": "smaller chunks lost the context around the answer",
+        "specificity": "recall at 5 went from 0.71 to 0.83 on our labelled set",
+        "structure": "first I tried 256, then 512 and 1024",
+        "communication": "512-token chunks with 50 tokens of overlap"
+      },
+      "strengths": [
+        "Backed the decision with a measured metric",
+        "Explained the failure mode of small chunks"
+      ],
+      "improvements": [
+        "Mention the cost side of the trade-off: larger chunks use more of the context window."
+      ],
+      "missed_key_points": [
+        "Larger chunks add noise and cost more context tokens"
+      ],
+      "score": 78,
+      "sample_answer": null
+    },
+    {
+      "question_id": "q2",
+      "text": "How would you evaluate whether a change to your RAG pipeline made answers better or worse?",
+      "topic": "llm_evaluation",
+      "transcript": [
+        {
+          "speaker": "interviewer",
+          "text": "How would you evaluate whether a change to your RAG pipeline made answers better or worse?"
+        },
+        {
+          "speaker": "candidate",
+          "text": "First we would run the new version and we checked if the answers looked correct on some questions from the team."
+        },
+        {
+          "speaker": "interviewer",
+          "text": "How would you make that repeatable?"
+        },
+        {
+          "speaker": "candidate",
+          "text": "Maybe keep the same questions and compare. I'm not fully sure about the metrics part."
+        }
+      ],
+      "evaluated": true,
+      "scores": {
+        "correctness": 3,
+        "depth": 2,
+        "specificity": 2,
+        "structure": 3,
+        "communication": 3
+      },
+      "evidence": {
+        "correctness": "we checked if the answers looked correct",
+        "depth": "",
+        "specificity": "",
+        "structure": "first we would run the new version",
+        "communication": "we checked if the answers looked correct"
+      },
+      "strengths": [
+        "Honest about the limits of your knowledge"
+      ],
+      "improvements": [
+        "Describe a versioned golden set and which metrics you'd track for retrieval vs generation.",
+        "Say how you'd catch regressions automatically, e.g. an eval gate in CI."
+      ],
+      "missed_key_points": [
+        "Fixed golden set with expected answers",
+        "Separate retrieval metrics (recall@k) from generation metrics (faithfulness)",
+        "LLM-as-judge with a rubric, validated against human ratings",
+        "Run in CI to catch regressions"
+      ],
+      "score": 40,
+      "sample_answer": "I'd start with a golden set: around 50 real user questions with reference answers and the documents that should be retrieved. For each pipeline change I'd measure retrieval and generation separately. Retrieval with recall at 5, because if the right chunk isn't retrieved, the model can't answer. Generation with faithfulness, meaning every claim is supported by the retrieved context, scored by an LLM judge with a fixed rubric that I validated against my own ratings on 30 answers. I'd run this in CI, so a prompt or chunking change that drops recall or faithfulness by more than a couple of points fails the build. In my support-bot project that would have caught the time we changed the embedding model and recall quietly dropped."
+    },
+    {
+      "question_id": "q3",
+      "text": "Walk me through how state flows through a LangGraph agent you've built.",
+      "topic": "agents_tool_use",
+      "transcript": [
+        {
+          "speaker": "interviewer",
+          "text": "Walk me through how state flows through a LangGraph agent you've built."
+        },
+        {
+          "speaker": "candidate",
+          "text": "The state is a typed dict that every node reads and returns updates to. The retry node checks the error count before looping back, and we capped it at three retries."
+        }
+      ],
+      "evaluated": true,
+      "scores": {
+        "correctness": 4,
+        "depth": 3,
+        "specificity": 3,
+        "structure": 3,
+        "communication": 4
+      },
+      "evidence": {
+        "correctness": "the state is a typed dict that every node reads and returns updates to",
+        "depth": "the retry node checks the error count before looping back",
+        "specificity": "we capped it at three retries",
+        "structure": "",
+        "communication": "the state is a typed dict that every node reads and returns updates to"
+      },
+      "strengths": [
+        "Accurate description of node updates",
+        "Mentioned a concrete retry cap"
+      ],
+      "improvements": [
+        "Mention reducers and checkpointing: they're what make LangGraph state reliable across steps."
+      ],
+      "missed_key_points": [
+        "Reducers for list fields like messages",
+        "Checkpointing for resumability"
+      ],
+      "score": 70,
+      "sample_answer": "In my document-QA agent the state is a TypedDict with the question, retrieved chunks, a messages list and an error count. Each node returns only the keys it changes, and the messages list uses an add reducer so nodes append instead of overwriting. After the tool node, a conditional edge checks the error count: under three it loops back to retry with a rewritten query, otherwise it goes to a fallback answer. I compiled it with a checkpointer, so a crashed run can resume from the last completed step."
+    }
+  ],
+  "speech": {
+    "avg_wpm": 148.2,
+    "pace": "good",
+    "total_words": 412,
+    "fillers_per_100_words": 3.6,
+    "filler_counts": {
+      "um": 6,
+      "basically": 4,
+      "like": 3,
+      "you know": 2
+    },
+    "hedges": 5,
+    "long_pauses": 3,
+    "answer_seconds": {
+      "q1": 62.0,
+      "q2": 31.5,
+      "q3": 74.0
+    },
+    "flags": [
+      "3.6 filler words per 100 words; pause silently instead."
+    ]
+  },
+  "coach_generated": true
+}

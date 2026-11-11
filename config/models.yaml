@@ -1,0 +1,32 @@
+# Model routing per task: swap models here without code changes.
+# Model names use LiteLLM's "provider/model" format. Check provider pages for current names & prices.
+#
+# - No `temperature` on Claude tasks: current Claude models reject any non-default sampling parameter (400).
+#   Consistency comes from the prompts, the fixed rubric and evidence checks (measure it: evals/run_evaluator).
+# - Claude 5.5 models think by default and thinking counts toward max_tokens, so caps are generous
+#   (you pay only for tokens used). `reasoning_effort` maps to Claude's output_config.effort and Groq's
+#   reasoning effort; "low" for simple extraction and the latency-critical interviewer.
+# - Fallbacks must be reachable: add e.g. "ollama/qwen2.5:7b" only if Ollama is running, otherwise every
+#   failure waits for its connection timeout before the user sees an error.
+resume_parser:   { model: "anthropic/claude-haiku-5-5",  max_tokens: 8000,  reasoning_effort: "low" }
+jd_analyzer:     { model: "anthropic/claude-haiku-5-5",  max_tokens: 4000,  reasoning_effort: "low" }
+planner:         { model: "anthropic/claude-sonnet-5-5", max_tokens: 16000 }
+interviewer:     { model: "groq/openai/gpt-oss-120b", temperature: 0.6, max_tokens: 600, timeout: 8,
+                   reasoning_effort: "low", fallbacks: ["anthropic/claude-haiku-5-5"] }
+evaluator:       { model: "anthropic/claude-sonnet-5-5", max_tokens: 8000 }
+coach:           { model: "anthropic/claude-sonnet-5-5", max_tokens: 16000 }
+guardrail:       { model: "anthropic/claude-haiku-5-5",  max_tokens: 2000,  reasoning_effort: "low" }
+summarizer:      { model: "anthropic/claude-haiku-5-5",  max_tokens: 4000,  reasoning_effort: "low" }
+
+# Embeddings for the question bank (vector size must match questions.embedding = 1024).
+# provider "local" runs bge-m3 with sentence-transformers (pip install -e ".[embeddings]");
+# provider "litellm" calls an API, e.g. { provider: "litellm", model: "openai/text-embedding-3-small", dim: 1024 }
+embeddings:      { provider: "local", model: "BAAI/bge-m3", dim: 1024, batch_size: 32 }
+
+# Speech-to-text. Hosted Whisper needs no GPU; for local faster-whisper (pip install -e ".[voice]") use e.g.
+# { provider: "local", model: "distil-large-v3", device: "auto", compute_type: "int8" }
+stt:             { provider: "litellm", model: "groq/whisper-large-v3-turbo", language: "en" }
+
+# Text-to-speech. "browser" = the client speaks the text (free, robotic); for a natural voice use e.g.
+# { provider: "litellm", model: "openai/tts-1", voice: "nova", response_format: "mp3" }
+tts:             { provider: "browser" }
